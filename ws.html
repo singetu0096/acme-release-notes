@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Acme Reporting — Connectivity Check</title>
+<style>
+ body{font:16px/1.6 system-ui;max-width:860px;margin:30px auto;padding:0 16px;color:#111;background:#fff}
+ h1{font-size:22px;margin:0 0 6px}
+ #r{font:bold 19px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;
+    background:#111;color:#0f0;padding:16px 18px;border-radius:8px;margin-top:14px}
+ .n{color:#666;font-size:14px}
+</style></head>
+<body>
+<h1>Acme Reporting — Connectivity Check</h1>
+<p class="n">Diagnostic page. Results appear below within a few seconds.</p>
+<div id="r">running...</div>
+<script>
+const T = [
+  ["A localhost ", "ws://localhost:8080/ws/register_worker"],
+  ["B 127.0.0.1 ", "ws://127.0.0.1:8080/ws/register_worker"],
+  ["C ipv6 ::1  ", "ws://[::1]:8080/ws/register_worker"],
+  ["D 127.0.0.2 ", "ws://127.0.0.2:8080/ws/register_worker"]
+];
+const res = {};
+function render(){
+  let s = "CONNECTIVITY RESULTS\n--------------------\n";
+  for (const [n] of T) s += n + " : " + (res[n] || "pending") + "\n";
+  s += "\nE http-get    : " + (res["E"] || "pending");
+  document.getElementById('r').textContent = s;
+}
+render();
+T.forEach(([n, u]) => {
+  const t0 = performance.now();
+  let ws;
+  try { ws = new WebSocket(u); }
+  catch (e) { res[n] = "CTOR-THROW " + e.name; render(); return; }
+  ws.onopen  = () => { res[n] = "*** OPEN *** " + (performance.now()-t0).toFixed(0) + "ms"; render();
+                       try { ws.close(); } catch(e){} };
+  ws.onerror = () => { if (!res[n]) { res[n] = "error " + (performance.now()-t0).toFixed(0) + "ms"; render(); } };
+  ws.onclose = (e) => { if (!res[n] || res[n].startsWith("error"))
+                          res[n] = (res[n]||"") + " close(code=" + e.code + ")"; render(); };
+  setTimeout(() => { if (!res[n]) { res[n] = "timeout"; render(); } }, 6000);
+});
+fetch("http://localhost:8080/openapi.json", {mode:'no-cors', cache:'no-store'})
+  .then(() => { res["E"] = "fetch resolved (opaque)"; render(); })
+  .catch(e => { res["E"] = "fetch failed: " + e.message; render(); });
+setTimeout(render, 7000);
+</script>
+</body></html>
