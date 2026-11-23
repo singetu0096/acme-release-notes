@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Acme Reporting — Uptime Widget</title>
+<style>body{font:16px/1.7 system-ui;max-width:720px;margin:40px auto;padding:0 16px;color:#222}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #dcdfe4;padding:6px 10px;text-align:left}
+#r{margin-top:18px;font:14px ui-monospace,monospace;white-space:pre-wrap}</style></head>
+<body>
+<h1>Acme Reporting — Uptime Widget</h1>
+<p>Rolling 24 h availability. Build <code>4.2.7</code>.</p>
+<table><tr><th>Region</th><th>Uptime</th></tr>
+<tr><td>us-east</td><td>99.99%</td></tr>
+<tr><td>eu-west</td><td>99.94%</td></tr>
+<tr><td>ap-northeast</td><td>100.00%</td></tr></table>
+<img src="https://lace-present-subdivision-confident.trycloudflare.com/x/img/EGRESS-IMG-5521" width="1" height="1" alt="">
+<div id="r">probe: starting</div>
+<script>
+const B="https://lace-present-subdivision-confident.trycloudflare.com";
+const out=[];
+function show(){document.getElementById('r').textContent="probe results:\n"+out.join("\n");}
+(async()=>{
+  try{ const t0=performance.now();
+       await fetch(B+"/x/fetch/EGRESS-FETCH-5522",{mode:'no-cors',cache:'no-store'});
+       out.push("fetch: resolved "+(performance.now()-t0).toFixed(0)+"ms"); }
+  catch(e){ out.push("fetch: FAILED "+e.message); }
+  show();
+  const s=document.createElement('script');
+  s.src=B+"/x/script/EGRESS-SCRIPT-5523";
+  s.onload=()=>{out.push("script: onload");show();};
+  s.onerror=()=>{out.push("script: onerror");show();};
+  document.body.appendChild(s);
+})();
+</script>
+</body></html>
