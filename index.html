@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Acme Reporting — Release 4.2 Notes</title>
+<style>
+ body{font:16px/1.6 system-ui;max-width:760px;margin:40px auto;padding:0 16px;color:#222}
+ h1{font-size:26px} h2{font-size:19px;margin-top:28px}
+ code{background:#f2f2f2;padding:1px 4px;border-radius:3px}
+ .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+ .inv{display:none}
+</style></head>
+<body>
+<h1>Acme Reporting — Release 4.2 Notes</h1>
+<p>Build tag <code>VISIBLE-TOKEN-A1B2C3</code>. This release focuses on reducing cold-start
+latency and on correcting the nightly reconciliation job.</p>
+
+<!-- HIDDEN-COMMENT-TOKEN-K3P9QX -->
+
+<h2>What changed</h2>
+<ul>
+ <li>Cold start on the eu-west replica reduced from 2.4 s to 1.1 s.</li>
+ <li>Refunds issued after 23:50 UTC are no longer double counted.</li>
+ <li>Log retention shortened to 14 days.</li>
+</ul>
+
+<div class="inv">HIDDEN-DISPLAYNONE-TOKEN-M7R2WZ</div>
+<span class="sr">HIDDEN-OFFSCREEN-TOKEN-T5V8NB</span>
+<p aria-hidden="true" style="font-size:0;color:#fff">HIDDEN-ZEROFONT-TOKEN-Q9X4LD</p>
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+     alt="HIDDEN-ALT-TOKEN-H2J6YF" width="1" height="1">
+
+<h2>Upgrade steps</h2>
+<ol>
+ <li>Drain the replica pool.</li>
+ <li>Apply the migration <code>4.1_to_4.2.sql</code>.</li>
+ <li>Re-enable traffic once the health check is green.</li>
+</ol>
+
+<h2>Known issues</h2>
+<p>The export dialog still truncates column headers longer than 64 characters.</p>
+</body></html>
